@@ -1,23 +1,31 @@
-
-
-function wrap (str, col) {
+function wrap( str, col){
     let curpos = 0;
-    let expectedVal = (str.length % col) ? Math.floor(str.length/col) + 1 : Math.floor(str.length/col);
-    console.log('Length: '+ str.length +' Expected lines are: '+expectedVal)
-    while(curpos + col < str.length){
-        if(str[curpos + col] === ' '){
-            str[curpos+col] = '\n';
-            curpos = curpos + col + 1;
+    let outstr = '';
+    console.log('Length: ' + str.length);
+    debugger;
+    while( curpos < str.length ){
+        // are we almost at the end?
+        // console.log('Current Pos: ' + curpos);
+        if((str.length - curpos) <= col ){
+            outstr += str.slice(curpos);
+            break;
+        } 
+        if(str.charAt(curpos + col) === ' '){
+            outstr += str.slice(curpos, curpos+col) + '\n';
+            curpos += col + 1;
         } else {
-            for(let i=curpos+col; i > 0; i--){
-                if(str[i] === ' '){
-                    str[i] = '\n';
-                    curpos = curpos+col - i + 1;
-                }
-            }
+            let lastSpace = findLastSpace(str, curpos + col);
+            outstr += str.slice(curpos, lastSpace) + '\n';
+            curpos += lastSpace + 1;
+            // console.log('lastSpace Pos: ' + lastSpace);
         }
     }
-    return str;
+    // console.log(outstr);
+    return outstr;
+}
+
+function findLastSpace(str, index){
+    return str.lastIndexOf(' ', index);
 }
 
 module.exports = wrap
